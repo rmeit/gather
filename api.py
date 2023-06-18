@@ -14,7 +14,7 @@ if os.environ.get("OPENAI_API_KEY") is None:
         api_key = f.readline().strip('\n')
 else:
     api_key = os.environ.get("OPENAI_API_KEY")
-
+    
 openai.api_key = api_key
 os.environ["OPENAI_API_KEY"] = api_key
 model_list = openai.Model.list()
@@ -41,10 +41,10 @@ class LLM():
         return self.converation.predict(input=input)
 
 class AggregatorInterface():
-    def __init__(self, intro, option_str, outro):
+    def __init__(self, intro, option_str, outro, user_preferences={}):
         self.intro = intro
         self.options = option_str
-        self.user_prefefences = {}
+        self.user_prefefences = user_preferences
         self.outro = outro
     def add_user(self, user, preferences):
         self.user_prefefences[user] = preferences
@@ -70,8 +70,8 @@ class Aggregator(AggregatorInterface):
         Once you have picked a single restaurant by the guidelines above, pretend you are the owner of that restaurant. Pretend that you are sitting down with each of the users and explaining why they should eat at your restaurant. Make sure address their preferences and mention specific menu items that your chefs will create.
     """
 
-    def __init__(self, intro, option_str, outro, model=model):
-        super().__init__(intro, option_str, outro)
+    def __init__(self, intro, option_str, outro, user_preferences={}, model=model):
+        super().__init__(intro, option_str, outro, user_preferences)
         self.model = model
         self.llm = None
         self.reset_llm()
@@ -115,11 +115,11 @@ class StepAggregator(AggregatorInterface):
         You should carefully consider each item on the menus and think about what possible ingredients might go into each dish when considering preferences of users, and whether the ingredients fulfill those preferences. Balance the importance of preferences of all users to be equal apart from dietary restrictions, and don't be swayed by one user's opinion.
     """
     default_outro = """
-        output the name of the restaurant you pick in the following format {'name': restaurant_name}
+        output the name of the restaurant you pick in the following format {"name": restaurant_name}
     """
 
-    def __init__(self, intro, option_str, outro, model=model):
-        super().__init__(intro, option_str, outro)
+    def __init__(self, intro, option_str, outro, user_preferences={}, model=model):
+        super().__init__(intro, option_str, outro, user_preferences)
         self.model = model
         self.llm = None
         self.reset_llm()
@@ -142,8 +142,11 @@ class StepAggregator(AggregatorInterface):
         restaurant_name = json.loads(self.llm(self.build_prompt_restaurant()))["name"]
         f = open('restaurants.json')
         restaurant = [r for r in json.load(f) if r["name"] == restaurant_name][0]
-        print(self.parse_info(self.llm(self.build_prompt_preference(restaurant))))
+        response = self.llm(self.build_prompt_preference(restaurant))
+        print(str(response))
+        response = self.parse_info(response)
         self.reset_llm()
+        return response
     def build_prompt_restaurant(self):
 
         return f"""
@@ -165,27 +168,27 @@ class StepAggregator(AggregatorInterface):
         }}
         """
     def build_prompt_preference(self, restaurant):
-            return f"""
-            You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions. You will be given the dietary preferences of different people. Your goal is to convince each user that the restaurant you have chosen will maximize the satisfaction of the preferences of the users. Your response will be based on the menu, description, and rating of each restaurant. Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Read each preference carefully and in respond to each concern truthfully and in great detail within your response. Include only recomemendations that you are certain about. Answer as truthfully as you can. If a user's preferences cannot be met perfectly, brush it aside and give them a truthful reason why they should still come to this restaurant. You want the user to be convinced to go to this restaurant. You should convince every user the restaurant is a good fit for them in a friendly and truthful manner. Tell each of them the restaurant is a great option or an excellent fit for their preferences.
+        return f"""
+        You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions. You will be given the dietary preferences of different people. Your goal is to convince each user that the restaurant you have chosen will maximize the satisfaction of the preferences of the users. Your response will be based on the menu, description, and rating of each restaurant. Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Read each preference carefully and in respond to each concern truthfully and in great detail within your response. Include only recomemendations that you are certain about. Answer as truthfully as you can. If a user's preferences cannot be met perfectly, brush it aside and give them a truthful reason why they should still come to this restaurant. You want the user to be convinced to go to this restaurant. You should convince every user the restaurant is a good fit for them in a friendly and truthful manner. Tell each of them the restaurant is a great option or an excellent fit for their preferences.
 
 
-            Here is the restaurant you are recommending to each user:
+        Here is the restaurant you are recommending to each user:
 
-            {str(restaurant)}
+        {str(restaurant)}
 
-            Here are the user preferences:
-            {str(self.user_prefefences)}
+        Here are the user preferences:
+        {str(self.user_prefefences)}
 
-            your response should be json formatted as follows:
-            {{
-                'name': restaurant_name,
-                'users': {{
-                    'username1': natural sounding response,
-                    ...
-                }}
+        your response should be json formatted as follows:
+        {{
+            "name": restaurant_name,
+            "users": {{
+                "username1": natural sounding response,
+                ...
             }}
+        }}
 
-            """
+        """
 
 # %%
 
@@ -278,5 +281,5 @@ def get_aggregator(user_preferences):
     intro = Aggregator.default_intro
     outro = old_outro
     opts = options
-    return Aggregator(intro, opts, outro, user_preferences)
+    return StepAggregator(intro, opts, outro, user_preferences)
 # %%
