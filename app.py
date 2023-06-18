@@ -1,4 +1,4 @@
-import os
+import os, sys
 import uuid
 from flask import (Flask, redirect, render_template, request, json, jsonify, url_for)
 import asyncio
@@ -8,6 +8,9 @@ app = Flask(__name__)
 def message(input):
     """Return an error message as a JSON object."""
     return jsonify({'message': input})
+
+def format_request(request):
+    return json.loads(request.data)
 
 class user:
     users = {}
@@ -70,7 +73,7 @@ class group:
 @app.route('/create_group', methods=['POST'])
 def create_group():
    """Creates a new group. Assigns group_id. Adds the creator to the group as the first user."""
-   content = request.form.to_dict()
+   content = format_request(request)
    creator_name = content['name']
    if creator_name:
         print('Request to create received with creator_name=%s' % creator_name)
@@ -84,7 +87,7 @@ def create_group():
 @app.route('/join_group', methods=['POST'])
 def join_group():
     """Join an existing group. Adds the user to the group."""
-    content = request.form.to_dict()
+    content = format_request(request)
     group_id = content['group_id']
     user_name = content['user_name']
     if group_id and user_name:
@@ -102,7 +105,7 @@ def join_group():
 @app.route('/set_preferences', methods=['POST'])
 def set_preferences():
     """Set the self-described preferences of a user."""
-    content = request.form.to_dict()
+    content = format_request(request)
     user_id = content['user_id']
     preferences = content['preferences']
     if user_id and preferences:
@@ -119,7 +122,7 @@ def set_preferences():
 @app.route('/find_recommendations', methods=['POST'])
 def find_recommendations():
     """Feed preferences to the model and find recommendations for a group. Only available to the group creator."""
-    user_id = request.form.to_dict()['user_id']
+    user_id = format_request(request)['user_id']
     if user_id:
         print('Request to find recommendations received with user_id=%s' % (user_id))
         if user_id not in user.users:
@@ -139,7 +142,7 @@ def find_recommendations():
 @app.route('/get_recommendations', methods=['POST'])
 def get_recommendations():
     """If recommendations are ready, return recommendations as a text string. Else do nothing."""
-    user_id = request.form.to_dict()['user_id']
+    user_id = format_request(request)['user_id']
     if user_id:
         print('Request to get recommendations received with user_id=%s' % (user_id))
         if user_id not in user.users:
@@ -159,4 +162,8 @@ def index():
    return True
 
 if __name__ == '__main__':
-   app.run()
+   isDev = sys.argv[1] == 'dev'
+   if isDev:
+    app.run(debug=True, host='0.0.0.0', port=80)
+   else:
+    app.run()
