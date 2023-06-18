@@ -127,7 +127,7 @@ def find_recommendations():
     
 @app.route('/get_recommendations', methods=['POST'])
 def get_recommendations():
-    """Return recommendations as a text string."""
+    """If recommendations are ready, return recommendations as a text string. Else do nothing."""
     user_id = request.form.get('user_id')
     if user_id:
         print('Request to get recommendations received with user_id=%s' % (user_id))
@@ -135,6 +135,8 @@ def get_recommendations():
             return "No user with that user_id exists."
         this_user = users[user_id]
         this_group = this_user.group
+        if this_group.recommendations == None:
+            return "No recommendations have been found yet for this group."
         return this_group.get_recommendations()
     else:
         print('Request for hello page received with no name or blank name -- redirecting')
