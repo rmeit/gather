@@ -1,8 +1,5 @@
 import os
 import uuid
-# from flask import (Flask, redirect, render_template, request,
-#                    send_from_directory, url_for)
-
 from flask import (Flask, redirect, render_template, request,
                    send_from_directory, url_for)
 
