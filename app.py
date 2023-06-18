@@ -156,7 +156,8 @@ def index():
    return True
 
 if __name__ == '__main__':
-   isDev = sys.argv[1] == 'dev'
+
+   isDev = len(sys.argv)>=2 and sys.argv[1] == 'dev'
    if isDev:
     app.run(debug=True, host='0.0.0.0', port=80)
    else:
