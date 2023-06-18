@@ -47,13 +47,27 @@ class AggregatorInterface():
     def get_user_list(self):
         return self.user_prefefences.keys()
     def build_prompt(self):
-        prompt = self.intro
-        prompt += "\nHere are the options:\n"
-        prompt += self.options
-        prompt += "\nHere are the user preferences:\n"
-        prompt += str(self.user_prefefences) + "\n"
-        prompt += self.outro
-        return prompt
+        return f"""
+        {self.intro}
+        
+        Here are the options:
+        {self.options}
+        
+        Here are the user preferences:
+        {str(self.user_prefefences)}
+        
+        {self.outro}
+        
+        your response should be json formatted as follows:
+        {{
+            'name': restaurant_name,
+            'users': {{
+                'username1': natural sounding response,
+                ...
+            }}
+        }}
+        
+        """
     def __call__(self):
         raise NotImplementedError
 
@@ -63,6 +77,7 @@ class Aggregator(AggregatorInterface):
         self.llm = LLM(model=model, template=LLM.trivial_template)
     def __call__(self):
         return print(self.llm(self.build_prompt()))
+# %%
 
 class FindDistances():
     def __init__(self, zipcode):
