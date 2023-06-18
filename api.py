@@ -9,9 +9,12 @@ from langchain.prompts.prompt import PromptTemplate
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 
-with open("openkey.txt", 'r') as f:
-    api_key = f.read()
-
+if os.environ.get("OPENAI_API_KEY") is None:
+    with open("openkey.txt", 'r') as f:
+        api_key = f.read()
+else:
+    api_key = os.environ.get("OPENAI_API_KEY")
+    
 openai.api_key = api_key
 os.environ["OPENAI_API_KEY"] = api_key
 model_list = openai.Model.list()
