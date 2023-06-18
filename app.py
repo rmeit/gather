@@ -42,15 +42,14 @@ class group:
         self.creator = user(creator_name, self, creator=True)
         self.users = {self.creator.user_id: self.creator}
         group.groups[self.group_id] = self
+        self.num_submissions = 0
         self.recommendations = None
         with open('rec.json', 'w') as f:
             f.write(json.dumps({}))
     
+    @property
     def num_users(self):
         return len(self.users)
-    
-    def num_submissions(self):
-        return len([u for u in self.users.values() if u.preferences is not None])
     
     def get_info(self):
         return self.creator.user_id, self.group_id
@@ -136,6 +135,7 @@ def set_preferences():
             return "No user with that user_id exists."
         this_user = user.users[user_id]
         this_user.set_preferences(preferences)
+        this_user.group.num_submissions += 1
         return jsonify(content)
     else:
         print('Request for page received with no name or blank name -- redirecting')
@@ -171,7 +171,7 @@ def group_status():
             return "No user with that user_id exists."
         this_user = user.users[user_id]
         group = this_user.group
-        return jsonify({'num_submissions': group.num_submissions(), 'num_users': group.num_users()})
+        return jsonify({'num_submissions': group.num_submissions, 'num_users': group.num_users})
     else:
         print('Request for page received with no name or blank name -- redirecting')
         return redirect(url_for('index'))
