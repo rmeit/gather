@@ -17,7 +17,7 @@ class user:
     """A unique user of the app."""
     def __init__(self, name, group, creator=False):
         self.name = name
-        self.user_id = uuid.uuid4()
+        self.user_id = str(uuid.uuid4())
         self.group = group
         self.creator = creator
         user.users[self.user_id] = self
@@ -40,6 +40,7 @@ class group:
         self.creator = user(creator_name, self, creator=True)
         self.users = {self.creator.user_id: self.creator}
         group.groups[self.group_id] = self
+        self.recommendations = None
     
     def get_info(self):
         return self.creator.user_id, self.group_id
@@ -47,19 +48,12 @@ class group:
     def add_user(self, user_name):
         new_user = user(user_name, self)
         self.users[new_user.user_id] = new_user
-        return new_user.user_id
-    
-    def set_preferences(self, user_name, preferences):
-        for user in self.users:
-            if user.name == user_name:
-                user.set_preferences(preferences)
-                return True
-        return False
+        return new_user
     
     def find_recommendations(self):
         """Feed the group's preferences to the model and get recommendations."""
         ### TODO ###
-        self.recommendations = None
+        self.recommendations = "We recommend a nice plate of figs."
         return self.recommendations
     
     def get_recommendations(self):
@@ -93,8 +87,7 @@ def join_group():
     if group_id and user_name:
         print('Request to join received with group_id=%s and user_name=%s' % (group_id, user_name))
         if group_id not in group.groups:
-            print("No group with that group_id exists.")
-            return {}
+            return message("No group with that group_id exists.")
         this_group = group.groups[group_id]
         new_user = this_group.add_user(user_name)
         return jsonify({'user_id': new_user.user_id})
@@ -149,9 +142,9 @@ def get_recommendations():
             return "No user with that user_id exists."
         this_user = user.users[user_id]
         this_group = this_user.group
-        if this_group.recommendations == None:
+        if this_group.get_recommendations() == None:
             return message("No recommendations have been found yet for this group.")
-        return jsonify({'recommendations': this_group.recommendations})
+        return jsonify({'recommendations': this_group.get_recommendations()})
     else:
         print('Request for page received with no name or blank name -- redirecting')
         return redirect(url_for('index'))
