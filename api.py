@@ -9,7 +9,7 @@ from langchain.prompts.prompt import PromptTemplate
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 
-api_key = "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"
+api_key = #
 
 openai.api_key = api_key
 os.environ["OPENAI_API_KEY"] = api_key
@@ -37,17 +37,17 @@ class LLM():
         return self.converation.predict(input=input)
 
 class AggregatorInterface():
-    def __init__(self, intro, option_str, outro):
+    def __init__(self, intro, option_str, outro, user_preferences={}):
         self.intro = intro
         self.options = option_str
-        self.user_prefefences = {}
+        self.user_preferences = user_preferences
         self.outro = outro
     def add_user(self, user, preferences):
-        self.user_prefefences[user] = preferences
+        self.user_preferences[user] = preferences
     def get_user(self, user):
-        return self.user_prefefences[user]
+        return self.user_preferences[user]
     def get_user_list(self):
-        return self.user_prefefences.keys()
+        return self.user_preferences.keys()
     def build_prompt(self):
 
         return f"""
@@ -57,7 +57,7 @@ class AggregatorInterface():
         {self.options}
         
         Here are the user preferences:
-        {str(self.user_prefefences)}
+        {str(self.user_preferences)}
         
         {self.outro}
         
@@ -88,8 +88,8 @@ class Aggregator(AggregatorInterface):
         Once you have picked a single restaurant by the guidelines above, pretend you are the owner of that restaurant. Pretend that you are sitting down with each of the users and explaining why they should eat at your restaurant. Make sure address their preferences and mention specific menu items that your chefs will create.
     """
 
-    def __init__(self, intro, option_str, outro, model=model):
-        super().__init__(intro, option_str, outro)
+    def __init__(self, intro, option_str, outro, user_preferences={}, model=model):
+        super().__init__(intro, option_str, outro, user_preferences)
         self.model = model
         self.llm = None
         self.reset_llm()
@@ -135,8 +135,8 @@ class StepAggregator(AggregatorInterface):
         output the name of the restaurant you pick in the following format {'name': restaurant_name}
     """
 
-    def __init__(self, intro, option_str, outro, model=model):
-        super().__init__(intro, option_str, outro)
+    def __init__(self, intro, option_str, outro, user_preferences={}, model=model):
+        super().__init__(intro, option_str, outro, user_preferences)
         self.model = model
         self.llm = None
         self.reset_llm()
@@ -180,7 +180,7 @@ class StepAggregator(AggregatorInterface):
         {self.options}
 
         Here are the user preferences:
-        {str(self.user_prefefences)}
+        {str(self.user_preferences)}
 
         {self.outro}
         """
@@ -206,7 +206,7 @@ class StepAggregator(AggregatorInterface):
             }}
 
             Here are the user preferences:
-            {str(self.user_prefefences)}
+            {str(self.user_preferences)}
 
             your response should be json formatted as follows:
             {{
