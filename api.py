@@ -11,10 +11,10 @@ from geopy.distance import geodesic
 
 if os.environ.get("OPENAI_API_KEY") is None:
     with open("openkey.txt", 'r') as f:
-        api_key = f.read()
+        api_key = f.readline().strip('\n')
 else:
     api_key = os.environ.get("OPENAI_API_KEY")
-    
+
 openai.api_key = api_key
 os.environ["OPENAI_API_KEY"] = api_key
 model_list = openai.Model.list()
@@ -104,30 +104,9 @@ class Aggregator(AggregatorInterface):
         return_dict["users"] = info["users"]
         return return_dict
     def __call__(self):
-        print(self.llm(self.build_prompt()))
+        response = self.llm(self.build_prompt())
         self.reset_llm()
-    def build_prompt(self):
-        return f"""
-        {self.intro}
-
-        Here are the options:
-        {self.options}
-
-        Here are the user preferences:
-        {str(self.user_prefefences)}
-
-        {self.outro}
-
-        your response should be json formatted as follows:
-        {{
-            'name': restaurant_name,
-            'users': {{
-                'username1': natural sounding response,
-                ...
-            }}
-        }}
-
-        """
+        return json.loads(response)
 
 class StepAggregator(AggregatorInterface):
     default_intro = """
@@ -148,22 +127,7 @@ class StepAggregator(AggregatorInterface):
         del self.llm
         self.llm = LLM(model=self.model, template=LLM.trivial_template)
     def parse_info(self, str):
-        # The output takes this format
-        # {
-        # "name": "Lavender Bakery and Cafe",
-        # "dollars": "$",
-        # "hours": "8:00 AM - 8:00 PM",
-        # "rating": "4.5",
-        # "address": "1820 Solano Ave Berkeley, CA 94707",
-        # "specialties": "Inspired",
-        # "menu_link": "https://www.yelp.com/biz_redir",
-        # "img": "https://s3-media0.fl.yelpcdn.com/bphoto/LDYjVd24saj82ixl4mTaFw/l.jpg"
-        # "users" :
-        #   {
-        #       "username0" : "explanation0",
-        #       "username1" : "explanation1"
-        #   }
-        # }
+        # Format output for display
         info = json.loads(str)
         name = info["name"]
         f = open('restaurants.json')
@@ -173,19 +137,20 @@ class StepAggregator(AggregatorInterface):
         return_dict["users"] = info["users"]
         return return_dict
     def __call__(self):
-        restaurant_name = self.llm(self.build_prompt_restaurant())
-        print("name:", str(restaurant_name))
-        # restaurant_name = json.loads(self.llm(self.build_prompt_restaurant()))["name"]
-        # f = open('restaurants.json')
-        # restaurant = [r for r in json.load(f) if r["name"] == restaurant_name][0]
-        # print(self.llm(self.build_prompt_preference(restaurant)))
-        # self.reset_llm()
+        # restaurant_name = self.llm(self.build_prompt_restaurant())
+        # print("name:", str(restaurant_name))
+        restaurant_name = json.loads(self.llm(self.build_prompt_restaurant()))["name"]
+        f = open('restaurants.json')
+        restaurant = [r for r in json.load(f) if r["name"] == restaurant_name][0]
+        print(self.parse_info(self.llm(self.build_prompt_preference(restaurant))))
+        self.reset_llm()
     def build_prompt_restaurant(self):
 
         return f"""
         You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions.
         You will be given the restaurant preferences of different people. Your goal is to recommend a single restaurant from the list below that will maximize the satisfaction of the preferences of the users, based on the menu, description, and rating of each restaurant. Avoid low rated restaurants unless no other choices are available. If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine  of the restaurant).
         You should carefully consider each item on the menus and think about what possible ingredients might go into each dish when considering preferences of users, and whether the ingredients fulfill those preferences. Balance the importance of preferences of all users to be equal apart from dietary restrictions, and apply gain control.
+        Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Read each preference carefully and honor them in your choice of restaurant.
 
         Here are the options:
         {self.options}
@@ -201,7 +166,7 @@ class StepAggregator(AggregatorInterface):
         """
     def build_prompt_preference(self, restaurant):
             return f"""
-            You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions. You will be given the dietary preferences of different people. Your goal is to convince each user that the restaurant you have chosen will maximize the satisfaction of the preferences of the users. Your response will be based on the menu, description, and rating of each restaurant. Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Include only recomemendations that you are certain about. Answer as truthfully as you can. If a user's preferences cannot be met perfectly, brush it aside and give them a truthful reason why they should still come to this restaurant. You want the user to be convinced to go to this restaurant. You should convince every user the restaurant is a good fit for them in a friendly manner.
+            You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions. You will be given the dietary preferences of different people. Your goal is to convince each user that the restaurant you have chosen will maximize the satisfaction of the preferences of the users. Your response will be based on the menu, description, and rating of each restaurant. Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Read each preference carefully and in respond to each concern truthfully and in great detail within your response. Include only recomemendations that you are certain about. Answer as truthfully as you can. If a user's preferences cannot be met perfectly, brush it aside and give them a truthful reason why they should still come to this restaurant. You want the user to be convinced to go to this restaurant. You should convince every user the restaurant is a good fit for them in a friendly and truthful manner. Tell each of them the restaurant is a great option or an excellent fit for their preferences.
 
 
             Here is the restaurant you are recommending to each user:
@@ -313,4 +278,5 @@ def get_aggregator(user_preferences):
     intro = Aggregator.default_intro
     outro = old_outro
     opts = options
-    return Aggregator(intro, opts, user_preferences, outro, user_preferences)
+    return Aggregator(intro, opts, outro, user_preferences)
+# %%
