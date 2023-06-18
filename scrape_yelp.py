@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import json
 import os
 
-url = 'https://www.yelp.com/search?find_desc=&find_loc=Berkeley%2C+CA'
 headers={
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding": "gzip, deflate, br",
@@ -21,6 +20,7 @@ headers={
 }
 
 def scrape_berkeley_restaurants():
+    url = 'https://www.yelp.com/search?find_desc=&find_loc=Berkeley%2C+CA'
     # there are 230 or so
     for i in range(24):
         request_url = url
@@ -48,8 +48,6 @@ def scrape_berkeley_restaurants():
             r = requests.get(restaurant_link, allow_redirects = True, headers = headers)
             content = str(r.content)
 
-
-
             start = content.find('property="og:description" content="')
             sub_content = content[start+35:]
             end = sub_content.find('">')
@@ -73,15 +71,31 @@ def scrape_berkeley_restaurants():
                 name = name.text
 
             dollars = restaurant_html.find('span',{"class":"css-1fdy0l5"})
-            if dollars.contains("$"):
-                if dollars:
+            if dollars:
+                if "$" in dollars:
                     dollars = dollars.text
+                else:
+                    dollars = ""
             else:
                 dollars = ""
+
+            maybe_menus = restaurant_html.find_all('a',{"class":"css-11i4m5w", "data-button":"true"})
+            menu = ""
+            if maybe_menus:
+                for maybe_menu in maybe_menus:
+                    if "yelp.com/biz_redir" in maybe_menu["href"]:
+                        menu = maybe_menu['href']
+            if menu == "":
+                menu = restaurant_link
 
             hours = restaurant_html.find('span',{"class":"display--inline__09f24__c6N_k margin-l1__09f24__m8GL9 border-color--default__09f24__NPAKY"})
             if hours:
                 hours = hours.text
+
+            img = restaurant_html.find('img',{"class":"photo-header-media-image__09f24__A1WR_"})
+            if img:
+                img = img['src']
+
             popular_dishes = [dish.text for dish in restaurant_html.find_all('p',{"class":"css-nyjpex"})]
 
             address = restaurant_html.find('p',{"class":"css-qyp8bo", "data-font-weight":"semibold"})
@@ -96,23 +110,54 @@ def scrape_berkeley_restaurants():
             restaurant_json["popular_dishes"] = popular_dishes
             restaurant_json["address"] = address
             restaurant_json["specialties"] = specialties
-
+            restaurant_json["menu_link"] = menu
+            restaurant_json["img"] = img
             restaurant_data.append(restaurant_json)
-
-        write_file = open("restaurants_"+str(i)+".json", 'w')
+        print(i)
+        write_file = open("more_restaurants_"+str(i)+".json", 'w')
         write_file.write(json.dumps(restaurant_data))
         write_file.close()
 
     all_data = []
     for i in range(24):
-        f = open('restaurants_'+str(i)+'.json')
+        f = open('more_restaurants_'+str(i)+'.json')
         data = json.load(f)
         all_data.extend(data)
-        os.remove('restaurants_'+str(i)+'.json')
+        os.remove('more_restaurants_'+str(i)+'.json')
 
-    write_file = open("restaurants.json", 'w')
+    write_file = open("more_restaurants_.json", 'w')
     write_file.write(json.dumps(all_data))
     write_file.close()
 
     # for the static database we need to manually clean a little bit
     # use an actual API for the future
+
+def parse_info(str):
+    # The output takes this format
+    # {
+    # "name": "Lavender Bakery and Cafe",
+    # "dollars": "$",
+    # "hours": "8:00 AM - 8:00 PM",
+    # "rating": "4.5",
+    # "address": "1820 Solano Ave Berkeley, CA 94707",
+    # "specialties": "Inspired by the desire to bring authentic European recipes to Berkeley, Lavender Bakery and Cafe began serving friends, neighbors and customers the best in Bay Area baked goods in October 2018.Famous for Burnt Almond, The Lavender Bakery has been bringing the finest authentic European inspired cakes and baked goods to the bay area. With two sister bakeries located in south bay silicon valley, Lavender Bakery serves a variety of cakes, cupcakes, pies, desserts, cookies, pastries and many seasonal and occasional items. Established in 2018.  Famous for Burnt Almond, The Lavender Bakery has been bringing the finest authentic European inspired cakes and baked goods to the bay area. With two sister bakeries located in south bay silicon valley, Lavender Bakery serves a variety of cakes, cupcakes, pies, desserts, cookies, pastries and many seasonal and occasional items.",
+    # "menu_link": "https://www.yelp.com/biz_redir?cachebuster=1687069122&s=49b13b9a5fd9fbbca9956e08fad2393d7d3fa5a9e7383be45481bfd8b4384711&src_bizid=lQYwz5KWxdiXjRttkAI6AQ&url=https%3A%2F%2Fwww.lavenderbakeries.com%2Fs%2Fsplash&website_link_type=menu",
+    # "img": "https://s3-media0.fl.yelpcdn.com/bphoto/LDYjVd24saj82ixl4mTaFw/l.jpg"
+    # "users" :
+    #   {
+    #       "username0" : "explanation0",
+    #       "username1" : "explanation1"
+    #   }
+    # }
+    info = json.loads(str)
+    name = info["name"]
+    print(name)
+    f = open('restaurants.json')
+    restaurants = json.load(f)
+    restaurant = [r for r in restaurants if r["name"] == name ][0]
+    wanted_keys = ['name', 'hours', 'address', 'dollars', 'rating', 'specialties', 'menu_link', 'img']
+    return_dict = dict((k, restaurant[k]) for k in wanted_keys if k in restaurant)
+    return_dict["users"] = info["users"]
+    return return_dict
+
+
