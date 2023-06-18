@@ -9,12 +9,8 @@ from langchain.prompts.prompt import PromptTemplate
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 
-<<<<<<< HEAD
-api_key = #
-=======
 with open("openkey.txt", 'r') as f:
     api_key = f.read()
->>>>>>> a6e6b39c80f3306d1bcd11aeadc590abd0d919e1
 
 openai.api_key = api_key
 os.environ["OPENAI_API_KEY"] = api_key
@@ -35,48 +31,26 @@ class LLM():
     """
     def __init__(self, model, template=example_template):
         self.model = model
-        self.llm = ChatOpenAI(model=model, temperature=0)
+        self.llm = ChatOpenAI(model=model, temperature=0.5)
         self.prompt = PromptTemplate(input_variables=["history", "input"], template=template)
         self.converation = ConversationChain(llm=self.llm, prompt=self.prompt, verbose=True)
     def __call__(self, input):
         return self.converation.predict(input=input)
 
 class AggregatorInterface():
-    def __init__(self, intro, option_str, outro, user_preferences={}):
+    def __init__(self, intro, option_str, outro):
         self.intro = intro
         self.options = option_str
-        self.user_preferences = user_preferences
+        self.user_prefefences = {}
         self.outro = outro
     def add_user(self, user, preferences):
-        self.user_preferences[user] = preferences
+        self.user_prefefences[user] = preferences
     def get_user(self, user):
-        return self.user_preferences[user]
+        return self.user_prefefences[user]
     def get_user_list(self):
-        return self.user_preferences.keys()
+        return self.user_prefefences.keys()
     def build_prompt(self):
-
-        return f"""
-        {self.intro}
-        
-        Here are the options:
-        {self.options}
-        
-        Here are the user preferences:
-        {str(self.user_preferences)}
-        
-        {self.outro}
-        
-        your response should be json formatted as follows:
-        {{
-            'name': restaurant_name,
-            'users': {{
-                'username1': natural sounding response,
-                ...
-            }}
-        }}
-        
-        """
-    
+        raise NotImplementedError
     def __call__(self):
         raise NotImplementedError
 
@@ -93,8 +67,8 @@ class Aggregator(AggregatorInterface):
         Once you have picked a single restaurant by the guidelines above, pretend you are the owner of that restaurant. Pretend that you are sitting down with each of the users and explaining why they should eat at your restaurant. Make sure address their preferences and mention specific menu items that your chefs will create.
     """
 
-    def __init__(self, intro, option_str, outro, user_preferences={}, model=model):
-        super().__init__(intro, option_str, outro, user_preferences)
+    def __init__(self, intro, option_str, outro, model=model):
+        super().__init__(intro, option_str, outro)
         self.model = model
         self.llm = None
         self.reset_llm()
@@ -129,6 +103,28 @@ class Aggregator(AggregatorInterface):
     def __call__(self):
         print(self.llm(self.build_prompt()))
         self.reset_llm()
+    def build_prompt(self):
+        return f"""
+        {self.intro}
+
+        Here are the options:
+        {self.options}
+
+        Here are the user preferences:
+        {str(self.user_prefefences)}
+
+        {self.outro}
+
+        your response should be json formatted as follows:
+        {{
+            'name': restaurant_name,
+            'users': {{
+                'username1': natural sounding response,
+                ...
+            }}
+        }}
+
+        """
 
 class StepAggregator(AggregatorInterface):
     default_intro = """
@@ -140,15 +136,15 @@ class StepAggregator(AggregatorInterface):
         output the name of the restaurant you pick in the following format {'name': restaurant_name}
     """
 
-    def __init__(self, intro, option_str, outro, user_preferences={}, model=model):
-        super().__init__(intro, option_str, outro, user_preferences)
+    def __init__(self, intro, option_str, outro, model=model):
+        super().__init__(intro, option_str, outro)
         self.model = model
         self.llm = None
         self.reset_llm()
     def reset_llm(self):
         del self.llm
         self.llm = LLM(model=self.model, template=LLM.trivial_template)
-    def parse_info(str):
+    def parse_info(self, str):
         # The output takes this format
         # {
         # "name": "Lavender Bakery and Cafe",
@@ -174,44 +170,43 @@ class StepAggregator(AggregatorInterface):
         return_dict["users"] = info["users"]
         return return_dict
     def __call__(self):
-        print(self.llm(self.build_prompt_preference()))
-        self.reset_llm()
+        restaurant_name = self.llm(self.build_prompt_restaurant())
+        print("name:", str(restaurant_name))
+        # restaurant_name = json.loads(self.llm(self.build_prompt_restaurant()))["name"]
+        # f = open('restaurants.json')
+        # restaurant = [r for r in json.load(f) if r["name"] == restaurant_name][0]
+        # print(self.llm(self.build_prompt_preference(restaurant)))
+        # self.reset_llm()
     def build_prompt_restaurant(self):
 
         return f"""
-        {self.intro}
+        You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions.
+        You will be given the restaurant preferences of different people. Your goal is to recommend a single restaurant from the list below that will maximize the satisfaction of the preferences of the users, based on the menu, description, and rating of each restaurant. Avoid low rated restaurants unless no other choices are available. If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine  of the restaurant).
+        You should carefully consider each item on the menus and think about what possible ingredients might go into each dish when considering preferences of users, and whether the ingredients fulfill those preferences. Balance the importance of preferences of all users to be equal apart from dietary restrictions, and apply gain control.
 
         Here are the options:
         {self.options}
 
         Here are the user preferences:
-        {str(self.user_preferences)}
+        {str(self.user_prefefences)}
 
-        {self.outro}
+        After you pick a single restaurant by the guidelines above, return only the name of the restaurant in the following JSON format (AND NOTHING ELSE):
+
+        {{
+            "name": restaurant_name
+        }}
         """
-    def build_prompt_preference(self):
+    def build_prompt_preference(self, restaurant):
             return f"""
-            You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions.
-            You will be given the restaurant preferences of different people. Your goal is to convince each user that the restaurant you have chosen will maximize the satisfaction of the preferences of the users. Your response will be based on the menu, description, and rating of each restaurant. If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine  of the restaurant), and specify when you are not sure whether the restaurant meets that criteria.
+            You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions. You will be given the dietary preferences of different people. Your goal is to convince each user that the restaurant you have chosen will maximize the satisfaction of the preferences of the users. Your response will be based on the menu, description, and rating of each restaurant. Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Include only recomemendations that you are certain about. Answer as truthfully as you can. If a user's preferences cannot be met perfectly, brush it aside and give them a truthful reason why they should still come to this restaurant. You want the user to be convinced to go to this restaurant. You should convince every user the restaurant is a good fit for them in a friendly manner.
 
-            Here is the restaurant you are reccomending to each user:
-            {{
-                "name" : "Eureka!",
-                "dollars" : "$$",
-                "hours" : "11:00 AM - 1:00 AM ",
-                "rating" : "4",
-                "popular_dishes" : [
-                "Cowboy",
-                "Fresno Fig",
-                "Jalapeno Egg",
-                "Steak Salad"
-                ],
-                "address" : "2068 Center St Berkeley, CA 94704",
-                "specialties" : "Specialties: Eureka! features an elevated collection of all-American fare paired with local craft beers, small-batch whiskeys, and cocktails making it the perfect place for for the local community to dine, drink and socialize. Established in 2009.  Eureka! is defined as expressing delight on finding, discovering or solving something... burger connoisseurs are discovering a better burger experience and Eureka! has elevated it to an art form requiring grace, finesse and sophistication. Acting with care ensures that efficiency never becomes haste and quality never suffers for convenience. Through thoughtful presentation of ourselves and our food, we show respect for our ingredients, our buildings, our guests and our colleagues."
-            }}
+
+            Here is the restaurant you are recommending to each user:
+
+            {str(restaurant)}
 
             Here are the user preferences:
-            {str(self.user_preferences)}
+            {str(self.user_prefefences)}
 
             your response should be json formatted as follows:
             {{
