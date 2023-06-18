@@ -123,27 +123,24 @@ class StepAggregator(AggregatorInterface):
         self.model = model
         self.llm = None
         self.reset_llm()
+        with open('restaurants.json', 'r') as f:
+            self.restaurants = json.load(f)
+        self.restaurant = None
     def reset_llm(self):
         del self.llm
         self.llm = LLM(model=self.model, template=LLM.trivial_template)
-    def parse_info(self, str):
+    def parse_info(self, response):
         # Format output for display
-        info = json.loads(str)
-        name = info["name"]
-        f = open('restaurants.json')
-        restaurant = [r for r in json.load(f) if r["name"] == name][0]
-        wanted_keys = ['name', 'dollars', 'hours', 'rating', 'address', 'specialties', 'menu_link', 'img']
-        return_dict = dict((k, restaurant[k]) for k in wanted_keys if k in restaurant)
-        return_dict["users"] = info["users"]
-        return return_dict
+        info = json.loads(response)
+        wanted_keys = ['dollars', 'hours', 'rating', 'address', 'specialties', 'menu_link', 'img']
+        info.update({k: self.restaurant[k] for k in wanted_keys if k in self.restaurant})
+        return info
     def __call__(self):
         # restaurant_name = self.llm(self.build_prompt_restaurant())
         # print("name:", str(restaurant_name))
         restaurant_name = json.loads(self.llm(self.build_prompt_restaurant()))["name"]
-        f = open('restaurants.json')
-        restaurant = [r for r in json.load(f) if r["name"] == restaurant_name][0]
-        response = self.llm(self.build_prompt_preference(restaurant))
-        print(str(response))
+        self.restaurant = [r for r in self.restaurants if r["name"] == restaurant_name][0]
+        response = self.llm(self.build_prompt_preference(self.restaurant))
         response = self.parse_info(response)
         self.reset_llm()
         return response
