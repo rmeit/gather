@@ -307,3 +307,8 @@ options = """
 
 """
 # %%
+def get_aggregator(user_preferences):
+    intro = Aggregator.default_intro
+    outro = old_outro
+    opts = options
+    return Aggregator(intro, opts, user_preferences, outro, user_preferences)
