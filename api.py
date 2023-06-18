@@ -79,7 +79,6 @@ class Aggregator(AggregatorInterface):
     def __init__(self, intro, option_str, outro, model=model):
         super().__init__(intro, option_str, outro)
         self.llm = LLM(model=model, template=LLM.trivial_template)
-
     def parse_info(str):
         # The output takes this format
         # {
@@ -88,8 +87,8 @@ class Aggregator(AggregatorInterface):
         # "hours": "8:00 AM - 8:00 PM",
         # "rating": "4.5",
         # "address": "1820 Solano Ave Berkeley, CA 94707",
-        # "specialties": "Inspired by the desire to bring authentic European recipes to Berkeley, Lavender Bakery and Cafe began serving friends, neighbors and customers the best in Bay Area baked goods in October 2018.Famous for Burnt Almond, The Lavender Bakery has been bringing the finest authentic European inspired cakes and baked goods to the bay area. With two sister bakeries located in south bay silicon valley, Lavender Bakery serves a variety of cakes, cupcakes, pies, desserts, cookies, pastries and many seasonal and occasional items. Established in 2018.  Famous for Burnt Almond, The Lavender Bakery has been bringing the finest authentic European inspired cakes and baked goods to the bay area. With two sister bakeries located in south bay silicon valley, Lavender Bakery serves a variety of cakes, cupcakes, pies, desserts, cookies, pastries and many seasonal and occasional items.",
-        # "menu_link": "https://www.yelp.com/biz_redir?cachebuster=1687069122&s=49b13b9a5fd9fbbca9956e08fad2393d7d3fa5a9e7383be45481bfd8b4384711&src_bizid=lQYwz5KWxdiXjRttkAI6AQ&url=https%3A%2F%2Fwww.lavenderbakeries.com%2Fs%2Fsplash&website_link_type=menu",
+        # "specialties": "Inspired",
+        # "menu_link": "https://www.yelp.com/biz_redir",
         # "img": "https://s3-media0.fl.yelpcdn.com/bphoto/LDYjVd24saj82ixl4mTaFw/l.jpg"
         # "users" :
         #   {
