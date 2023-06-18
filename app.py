@@ -1,7 +1,6 @@
 import os
 import uuid
-from flask import (Flask, redirect, render_template, request,
-                   send_from_directory, url_for)
+from flask import (Flask, redirect, render_template, request, json, jsonify, url_for)
 
 app = Flask(__name__)
 
@@ -60,20 +59,33 @@ class group:
     def delete(self):
         ### TODO ###
         return True
+    
+@app.route('/create_room', methods=['POST'])
+def create_room():
+   """Creates a new group. Assigns group_id. Adds the creator to the group as the first user."""
+   content_type = request.headers.get('Content-Type')
+   if (content_type == 'application/json'):
+       json = request.get_json()
+   creator_name = request.form.get('name')
+   if creator_name:
+        print('Request to create received with creator_name=%s' % creator_name)
+        creator_id, new_group = group(creator_name)
+        return jsonify({'user_id': creator_id, 'group_id': new_group.group_id})
+   else:
+       print('Request for hello page received with no name or blank name -- redirecting')
+       return {} 
 
 @app.route('/create_room', methods=['POST'])
 def create_room():
    """Creates a new group. Assigns group_id. Adds the creator to the group as the first user."""
-   creator_name = request.form.get('creator_name')
+   creator_name = request.form.get('name')
    if creator_name:
          print('Request to create received with creator_name=%s' % creator_name)
          creator_id, new_group = group(creator_name)
-         return '''
-              <h1>Your user id is: {}</h1>
-              <h1>Your group id is: {}'''.format(creator_id, new_group.group_id)
+         return jsonify({'user_id': creator_id, 'group_id': new_group.group_id})
    else:
        print('Request for hello page received with no name or blank name -- redirecting')
-       return redirect(url_for('index'))
+       return {}
    
 @app.route('/join_room', methods=['POST'])
 def join_room():
@@ -83,13 +95,14 @@ def join_room():
     if group_id and user_name:
         print('Request to join received with group_id=%s and user_name=%s' % (group_id, user_name))
         if group_id not in groups:
-            return "No group with that group_id exists."
+            print("No group with that group_id exists.")
+            return {}
         this_group = groups[group_id]
         new_user = this_group.add_user(user_name)
-        return '''<h1>Your user id is: {}'''.format(new_user.user_id, group_id)
+        return jsonify({'user_id': new_user.user_id})
     else:
         print('Request for hello page received with no name or blank name -- redirecting')
-        return redirect(url_for('index'))
+        return {}
     
 @app.route('/set_preferences', methods=['POST'])
 def set_preferences():
@@ -137,7 +150,7 @@ def get_recommendations():
         this_group = this_user.group
         if this_group.recommendations == None:
             return "No recommendations have been found yet for this group."
-        return this_group.get_recommendations()
+        return jsonify({'recommendations': this_group.recommendations})
     else:
         print('Request for hello page received with no name or blank name -- redirecting')
         return redirect(url_for('index'))
