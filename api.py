@@ -8,7 +8,7 @@ from langchain.prompts.prompt import PromptTemplate
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 
-api_key = #
+api_key = 0
 openai.api_key = api_key
 os.environ["OPENAI_API_KEY"] = api_key
 model_list = openai.Model.list()
