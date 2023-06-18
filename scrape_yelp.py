@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import json
 import os
 
-
 headers={
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding": "gzip, deflate, br",
@@ -134,19 +133,31 @@ def scrape_berkeley_restaurants():
     # use an actual API for the future
 
 def parse_info(str):
-    # Force chatGPT to output this format:
+    # The output takes this format
     # {
-    # "name": "Berkeley Social Club",
-    # "explanation": "Berkeley Social Club is a unique establishment that combines contemporary full bar Korean cuisine with American breakfast and lunch options. The restaurant offers a wide variety of popular dishes, including Bulgogi, Blackstone Benedict, Spicy Pork, and more. The diverse menu and the availability of both Korean and American dishes cater to a wide range of preferences. The casual and social atmosphere makes it a great place to enjoy a meal with friends or family."
+    # "name": "Lavender Bakery and Cafe",
+    # "dollars": "$",
+    # "hours": "8:00 AM - 8:00 PM",
+    # "rating": "4.5",
+    # "address": "1820 Solano Ave Berkeley, CA 94707",
+    # "specialties": "Inspired by the desire to bring authentic European recipes to Berkeley, Lavender Bakery and Cafe began serving friends, neighbors and customers the best in Bay Area baked goods in October 2018.Famous for Burnt Almond, The Lavender Bakery has been bringing the finest authentic European inspired cakes and baked goods to the bay area. With two sister bakeries located in south bay silicon valley, Lavender Bakery serves a variety of cakes, cupcakes, pies, desserts, cookies, pastries and many seasonal and occasional items. Established in 2018.  Famous for Burnt Almond, The Lavender Bakery has been bringing the finest authentic European inspired cakes and baked goods to the bay area. With two sister bakeries located in south bay silicon valley, Lavender Bakery serves a variety of cakes, cupcakes, pies, desserts, cookies, pastries and many seasonal and occasional items.",
+    # "menu_link": "https://www.yelp.com/biz_redir?cachebuster=1687069122&s=49b13b9a5fd9fbbca9956e08fad2393d7d3fa5a9e7383be45481bfd8b4384711&src_bizid=lQYwz5KWxdiXjRttkAI6AQ&url=https%3A%2F%2Fwww.lavenderbakeries.com%2Fs%2Fsplash&website_link_type=menu",
+    # "img": "https://s3-media0.fl.yelpcdn.com/bphoto/LDYjVd24saj82ixl4mTaFw/l.jpg"
+    # "users" :
+    #   {
+    #       "username0" : "explanation0",
+    #       "username1" : "explanation1"
+    #   }
     # }
     info = json.loads(str)
     name = info["name"]
-    f = open('more_restaurants.json')
+    print(name)
+    f = open('restaurants.json')
     restaurants = json.load(f)
-    restaurant = restaurants[name]
+    restaurant = [r for r in restaurants if r["name"] == name ][0]
     wanted_keys = ['name', 'hours', 'address', 'dollars', 'rating', 'specialties', 'menu_link', 'img']
-    return dict((k, restaurant[k]) for k in wanted_keys if k in restaurant)
+    return_dict = dict((k, restaurant[k]) for k in wanted_keys if k in restaurant)
+    return_dict["users"] = info["users"]
+    return return_dict
 
 
-
-scrape_berkeley_restaurants()
