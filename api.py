@@ -76,6 +76,13 @@ class AggregatorInterface():
         raise NotImplementedError
 
 class Aggregator(AggregatorInterface):
+    default_intro = """
+        You are a helpful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions.
+        You will be given the restaurant preferences of different people. Your goal is to recommend a single  restaurant from the list below that will satisfy the preferences of all the people, based on the menu, description, and rating of each restaurant. Avoid low rated restaurants unless not other choices are available. If a person has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine  of the restaurant), and specify when you are not sure whether a certain restaurant meets that criteria.
+    """
+    default_outro = """
+        After you pick a single  restaurant by the guidelines above,  make a short human-like  reply to each user addressing how the restaurant satisfies their preferences, or if there are any concerns for their preferences.
+    """
     def __init__(self, intro, option_str, outro, model=model):
         super().__init__(intro, option_str, outro)
         self.llm = LLM(model=model, template=LLM.trivial_template)
