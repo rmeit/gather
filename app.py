@@ -1,7 +1,7 @@
 import os, sys
 import uuid
 from flask import (Flask, redirect, render_template, request, json, jsonify, url_for)
-import asyncio
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -124,9 +124,7 @@ def find_recommendations():
         if not this_user.creator:
             return "Only the group creator can find recommendations."
         this_group = this_user.group
-        async def find_recommendations():
-            return this_group.find_recommendations()
-        _ = find_recommendations()
+        Thread(target=this_group.find_recommendations).start()
         return jsonify({'user_id': user_id})
     else:
         print('Request for page received with no name or blank name -- redirecting')
