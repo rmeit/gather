@@ -18,7 +18,9 @@ else:
 openai.api_key = api_key
 os.environ["OPENAI_API_KEY"] = api_key
 model_list = openai.Model.list()
-model = "gpt-3.5-turbo-0613"
+# model = "gpt-3.5-turbo-0613"
+model = "gpt-4-0613"
+# model = "gpt-3-5-turbo-16k-0613"
 
 class LLM():
     example_template = """
@@ -131,6 +133,7 @@ class StepAggregator(AggregatorInterface):
         self.llm = LLM(model=self.model, template=LLM.trivial_template)
     def parse_info(self, response):
         # Format output for display
+        response = response[response.find('{'): len(response)-response[::-1].find('}')]
         info = json.loads(response)
         wanted_keys = ['dollars', 'hours', 'rating', 'address', 'specialties', 'menu_link', 'img']
         info.update({k: self.restaurant[k] for k in wanted_keys if k in self.restaurant})
@@ -138,7 +141,15 @@ class StepAggregator(AggregatorInterface):
     def __call__(self):
         # restaurant_name = self.llm(self.build_prompt_restaurant())
         # print("name:", str(restaurant_name))
-        restaurant_name = json.loads(self.llm(self.build_prompt_restaurant()))["name"]
+        response = self.llm(self.build_prompt_restaurant())
+        try:
+            response = response.split('{')[1]
+            response = '{' + response.split('}')[0] + '}'
+            restaurant_name = json.loads(response)["name"]
+        except:
+            print(response)
+            raise Exception("failed to parse restaurant name")
+        print(restaurant_name)
         self.restaurant = [r for r in self.restaurants if r["name"] == restaurant_name][0]
         response = self.llm(self.build_prompt_preference(self.restaurant))
         response = self.parse_info(response)
@@ -153,12 +164,12 @@ class StepAggregator(AggregatorInterface):
         Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Read each preference carefully and honor them in your choice of restaurant.
 
         Here are the options:
-        {self.options}
+        {str(self.restaurants)}
 
         Here are the user preferences:
         {str(self.user_prefefences)}
 
-        After you pick a single restaurant by the guidelines above, return only the name of the restaurant in the following JSON format (AND NOTHING ELSE):
+        After you pick a single restaurant by the guidelines above, you become a JSON outputting function that only outputs in the following format:
 
         {{
             "name": restaurant_name
@@ -166,7 +177,7 @@ class StepAggregator(AggregatorInterface):
         """
     def build_prompt_preference(self, restaurant):
         return f"""
-        You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions. You will be given the dietary preferences of different people. Your goal is to convince each user that the restaurant you have chosen will maximize the satisfaction of the preferences of the users. Your response will be based on the menu, description, and rating of each restaurant. Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Read each preference carefully and in respond to each concern truthfully and in great detail within your response. Include only recomemendations that you are certain about. Answer as truthfully as you can. If a user's preferences cannot be met perfectly, brush it aside and give them a truthful reason why they should still come to this restaurant. You want the user to be convinced to go to this restaurant. You should convince every user the restaurant is a good fit for them in a friendly and truthful manner. Tell each of them the restaurant is a great option or an excellent fit for their preferences.
+        You are a helpful, truthful, informative, and concise AI assistant whose purpose is to help people be satisfied, especially when making group decisions or resolutions. You are very knowledgeable about nutrition and human allergies and are accommodating of such conditions. You will be given the dietary preferences of different people. Your goal is to convince the group of users that the restaurant you have chosen will maximize the satisfaction of the preferences of the users. Your response will be based on the menu, description, and rating of each restaurant. Pretend you are the owner of the restaurant who knows exactly what ingredients are in each dish and what ingredients are not, If a user has allergies or cannot eat a certain food, make sure the restaurant is friendly to their needs (i.e. consider risk levels and also knowledge of the cuisine of the restaurant), and specify when you are not sure whether the restaurant meets that criteria. Read each preference carefully and in respond to concerns truthfully and in great detail. Include only recomemendations that you are certain about. Answer as truthfully as you can. If a user's preferences cannot be met perfectly, brush it aside and give a truthful reason why they should still come to this restaurant. Truthful; truthful; truthful; truthful.
 
 
         Here is the restaurant you are recommending to each user:
@@ -179,13 +190,14 @@ class StepAggregator(AggregatorInterface):
         your response should be json formatted as follows:
         {{
             "name": restaurant_name,
-            "users": {{
-                "username1": natural sounding response,
-                ...
-            }}
+            "response": natural sounding response summary 
         }}
 
         """
+        # "users": {{
+        #         "username1": natural sounding response,
+        #         ...
+        #     }}
 
 # %%
 
@@ -214,69 +226,117 @@ class FindDistances():
         return geodesic(self.main_address_encoded, self.encode_address(address)).miles
 
 
-options = """
+# options = """
 
- {
-    "name" : "Eureka!",
-    "dollars" : "$$",
-    "hours" : "11:00 AM - 1:00 AM ",
-    "rating" : "4",
-    "popular_dishes" : [
-      "Cowboy",
-      "Fresno Fig",
-      "Jalapeno Egg",
-      "Steak Salad"
-    ],
-    "address" : "2068 Center St Berkeley, CA 94704",
-    "specialties" : "Specialties: Eureka! features an elevated collection of all-American fare paired with local craft beers, small-batch whiskeys, and cocktails making it the perfect place for for the local community to dine, drink and socialize. Established in 2009.  Eureka! is defined as expressing delight on finding, discovering or solving something... burger connoisseurs are discovering a better burger experience and Eureka! has elevated it to an art form requiring grace, finesse and sophistication. Acting with care ensures that efficiency never becomes haste and quality never suffers for convenience. Through thoughtful presentation of ourselves and our food, we show respect for our ingredients, our buildings, our guests and our colleagues."
-  },
-  {
-    "name" : "Angeline's Louisiana Kitchen",
-    "dollars" : "$$",
-    "hours" : "10:00 AM - 9:00 PM",
-    "rating" : "4",
-    "popular_dishes" : [
-      "Jambalaya",
-      "Buttermilk Fried Chicken",
-      "Fried Catfish",
-      "Shrimp Creole",
-      "Crawfish Etouffee",
-      "Cajun Mixed Grill",
-      "Baby Back Ribs",
-      "Angeline's Creole-style BBQ Shrimp",
-      "Red Beans and Rice",
-      "Wild Mushroom Jambalaya",
-      "Voo Doo Shrimp"
-    ],
-    "address" : "2261 Shattuck Ave Berkeley, CA 94704",
-    "specialties" : "Specialties: Angeline's brings the flavor and atmosphere of a New Orleans neighborhood restaurant to downtown Berkeley, with great music, libations and the classic dishes invented in the Crescent City's greatest kitchens. We offer down-home classics like Gumbo, Jambalaya, Fried Catfish, or our Buttermilk Fried Chicken. For dessert, try our Bananas Foster Bread Pudding or our signature warm Beignets with chicory coffee. Whatever you try, you'll leave happy. Established in 2006.  Angeline's began as the dream of founder Robert Volberg as a way to bring southern hospitality and the delicious flavors of New Orleans to the bay area.  Inspired by the neighborhood jambalaya joints he had visited on a trip to the Big Easy six months before Katrina, Robert was looking for a location for his new restaurant when he struck up a conversation with a man in chef's pants in Oakland's Rockridge district.  The man was Chef Brandon Dubea from Baton Rouge, LA.  After working to develop an outstanding menu and create a delightful atmosphere, Angeline's opened quietly and gained popularity slowly after opening.  After reviews in the East Bay Express, SF Chronicle, Diablo Magazine and many others which hailed Chef Dubea's cuisine as 'authentic' and dishes as having 'real character', Angeline's was featured on an episode of 'Check Please, Bay Area'.  As word spread about the restaurant, Tempe Minaga completed the team as co-owner in mid 2008 to improve service and operations."
-  },
-{
-    "name" : "Fish & Bird Sousaku Izakaya",
-    "dollars" : “”
-    "hours" : "4:30 PM - 9:30 PM",
-    "rating" : "4",
-    "popular_dishes" : [
-      "Chicken Karaage",
-      "Chicken Katsu",
-      "Sea Beans & Corn Tempura",
-      "Chicken Katsu Curry",
-      "Agedashi Tofu",
-      "Soft Tofu",
-      "Green Beans Fritters W/ Curry Sansho Salt",
-      "Deluxe Sashimi Moriawase",
-      "Seasonal Salad"
-    ],
-    "address" : "2451 Shattuck Ave Berkeley, CA 94704",
-    "specialties" : "Specialties: Fish & Bird is a unique izakaya style restaurant and bar, specializing in modern Japanese cuisine. The modern, sophisticated interpretation of traditional dishes is a reflection of the current trends in Japan."
-  }
+#  {
+#     "name" : "Eureka!",
+#     "dollars" : "$$",
+#     "hours" : "11:00 AM - 1:00 AM ",
+#     "rating" : "4",
+#     "popular_dishes" : [
+#       "Cowboy",
+#       "Fresno Fig",
+#       "Jalapeno Egg",
+#       "Steak Salad"
+#     ],
+#     "address" : "2068 Center St Berkeley, CA 94704",
+#     "specialties" : "Specialties: Eureka! features an elevated collection of all-American fare paired with local craft beers, small-batch whiskeys, and cocktails making it the perfect place for for the local community to dine, drink and socialize. Established in 2009.  Eureka! is defined as expressing delight on finding, discovering or solving something... burger connoisseurs are discovering a better burger experience and Eureka! has elevated it to an art form requiring grace, finesse and sophistication. Acting with care ensures that efficiency never becomes haste and quality never suffers for convenience. Through thoughtful presentation of ourselves and our food, we show respect for our ingredients, our buildings, our guests and our colleagues."
+#   },
+#   {
+#     "name" : "Angeline's Louisiana Kitchen",
+#     "dollars" : "$$",
+#     "hours" : "10:00 AM - 9:00 PM",
+#     "rating" : "4",
+#     "popular_dishes" : [
+#       "Jambalaya",
+#       "Buttermilk Fried Chicken",
+#       "Fried Catfish",
+#       "Shrimp Creole",
+#       "Crawfish Etouffee",
+#       "Cajun Mixed Grill",
+#       "Baby Back Ribs",
+#       "Angeline's Creole-style BBQ Shrimp",
+#       "Red Beans and Rice",
+#       "Wild Mushroom Jambalaya",
+#       "Voo Doo Shrimp"
+#     ],
+#     "address" : "2261 Shattuck Ave Berkeley, CA 94704",
+#     "specialties" : "Specialties: Angeline's brings the flavor and atmosphere of a New Orleans neighborhood restaurant to downtown Berkeley, with great music, libations and the classic dishes invented in the Crescent City's greatest kitchens. We offer down-home classics like Gumbo, Jambalaya, Fried Catfish, or our Buttermilk Fried Chicken. For dessert, try our Bananas Foster Bread Pudding or our signature warm Beignets with chicory coffee. Whatever you try, you'll leave happy. Established in 2006.  Angeline's began as the dream of founder Robert Volberg as a way to bring southern hospitality and the delicious flavors of New Orleans to the bay area.  Inspired by the neighborhood jambalaya joints he had visited on a trip to the Big Easy six months before Katrina, Robert was looking for a location for his new restaurant when he struck up a conversation with a man in chef's pants in Oakland's Rockridge district.  The man was Chef Brandon Dubea from Baton Rouge, LA.  After working to develop an outstanding menu and create a delightful atmosphere, Angeline's opened quietly and gained popularity slowly after opening.  After reviews in the East Bay Express, SF Chronicle, Diablo Magazine and many others which hailed Chef Dubea's cuisine as 'authentic' and dishes as having 'real character', Angeline's was featured on an episode of 'Check Please, Bay Area'.  As word spread about the restaurant, Tempe Minaga completed the team as co-owner in mid 2008 to improve service and operations."
+#   },
+# {
+#     "name" : "Fish & Bird Sousaku Izakaya",
+#     "dollars" : “$$”
+#     "hours" : "4:30 PM - 9:30 PM",
+#     "rating" : "4",
+#     "popular_dishes" : [
+#       "Chicken Karaage",
+#       "Chicken Katsu",
+#       "Sea Beans & Corn Tempura",
+#       "Chicken Katsu Curry",
+#       "Agedashi Tofu",
+#       "Soft Tofu",
+#       "Green Beans Fritters W/ Curry Sansho Salt",
+#       "Deluxe Sashimi Moriawase",
+#       "Seasonal Salad"
+#     ],
+#     "address" : "2451 Shattuck Ave Berkeley, CA 94704",
+#     "specialties" : "Specialties: Fish & Bird is a unique izakaya style restaurant and bar, specializing in modern Japanese cuisine. The modern, sophisticated interpretation of traditional dishes is a reflection of the current trends in Japan."
+#   }
+#   {
+#     "name": "Creekwood",
+#     "dollars": "$$",
+#     "hours": "10:00 AM - 2:00 PM, 4:00 PM - 9:00 PM",
+#     "rating": "4.5",
+#     "popular_dishes": [
+#       "Gnocchi",
+#       "Meatballs",
+#       "Little Gems Salad",
+#       "Mushroom Pizza",
+#       "Roasted Beet Salad",
+#       "Ribeye",
+#       "Margherita Pizza",
+#       "Fried Chicken Sandwich",
+#       "Burrata",
+#       "Cameroni",
+#       "Calzone",
+#       "Almond Cake"
+#     ],
+#     "address": "3121 Sacramento St Berkeley, CA 94702",
+#     "specialties": "Providing thoughtfully prepared, seasonal, local ingredients in a comfortable, friendly environment. Please make reservations through our website. Established in 2018.  Creekwood restaurant spans 1,700 square feet, seats 50 inside and 16 people  outside on the heated patio."
+#   },
+#   {
+#     "name": "La Note",
+#     "dollars": "$$",
+#     "hours": "8:00 AM - 3:00 PM",
+#     "rating": "4",
+#     "popular_dishes": [
+#       "Lemon Gingerbread Pancakes and Poached Pears",
+#       "Cote Nord",
+#       "Toasted Cinnamon Brioche",
+#       "Brioche Pain Perdu",
+#       "Cote Est",
+#       "Les Oeufs Maison",
+#       "Omelette De Pommes De Terre",
+#       "Cote Sud",
+#       "Omelette Fromage Et Jambon",
+#       "Cote Ouest",
+#       "Oeuf A La Coque",
+#       "Bowl of Creamy Raspberry Oatmeal",
+#       "Tartine"
+#     ],
+#     "address": "2377 Shattuck Ave Berkeley, CA 94704",
+#     "specialties": "",
+#     "menu_link": "https://www.yelp.com/biz_redir?cachebuster=1687069095&s=438c36bf1e073e1daa5c7e2dba49de67fdcbf87fb10ff4f6520fe18fee319e54&src_bizid=dmZS7KKxE8GHfIHzsenqUQ&url=http%3A%2F%2Fwww.lanoterestaurant.com%2Fmenu&website_link_type=menu",
+#     "img": "https://s3-media0.fl.yelpcdn.com/bphoto/-D6hiYtszGVJNc3zQMRjhQ/l.jpg"
+#   }
+  
 
 
-"""
+# """
 # %%
 def get_aggregator(user_preferences):
     intro = Aggregator.default_intro
     outro = old_outro
-    opts = options
+    opts = ""
     return StepAggregator(intro, opts, outro, user_preferences)
 # %%
