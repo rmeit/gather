@@ -46,6 +46,12 @@ class group:
         with open('rec.json', 'w') as f:
             f.write(json.dumps({}))
     
+    def num_users(self):
+        return len(self.users)
+    
+    def num_submissions(self):
+        return len([u for u in self.users.values() if u.preferences is not None])
+    
     def get_info(self):
         return self.creator.user_id, self.group_id
     
@@ -160,7 +166,7 @@ def group_status():
     content = format_request(request)
     user_id = content['user_id']
     if user_id:
-        print('Request to get group status of user_id=%s' % (user_id, preferences))
+        print('Request to get group status of user_id=%s' % (user_id))
         if user_id not in user.users:
             return "No user with that user_id exists."
         this_user = user.users[user_id]
