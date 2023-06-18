@@ -20,94 +20,99 @@ headers={
     "X-Amzn-Trace-Id": "Root=1-609b3347-59f1ba2d65f6c2ad14aac0c3"
 }
 
-for i in range(24):
-    request_url = url
-    if i > 0:
-        request_url = url+"&start="+ str(10*i)
-    r = requests.get(request_url, allow_redirects = True, headers = headers)
-    html = r.content
+def scrape_berkeley_restaurants():
+    # there are 230 or so
+    for i in range(24):
+        request_url = url
+        if i > 0:
+            request_url = url+"&start="+ str(10*i)
+        r = requests.get(request_url, allow_redirects = True, headers = headers)
+        html = r.content
 
-    soup = BeautifulSoup(html,'html.parser')
-    restaurants = soup.find_all('div', {"data-testid":"serp-ia-card"})
+        soup = BeautifulSoup(html,'html.parser')
+        restaurants = soup.find_all('div', {"data-testid":"serp-ia-card"})
 
-    restaurant_data = []
+        restaurant_data = []
 
-    for restaurant in restaurants:
-        link = restaurant.find('a', {"class":"css-19v1rkv"})
-        restaurant_link = link['href']
-
-
-        if "campaign_id" in restaurant_link:
-            start = restaurant_link.find("www.yelp.com%2Fbiz%2F")
-            end = restaurant_link.find("&request_id")
-            restaurant_link = "/biz/"+restaurant_link[start+21:end]
-
-        restaurant_link = "https://www.yelp.com"+ restaurant_link
-        r = requests.get(restaurant_link, allow_redirects = True, headers = headers)
-        content = str(r.content)
+        for restaurant in restaurants:
+            link = restaurant.find('a', {"class":"css-19v1rkv"})
+            restaurant_link = link['href']
 
 
+            if "campaign_id" in restaurant_link:
+                start = restaurant_link.find("www.yelp.com%2Fbiz%2F")
+                end = restaurant_link.find("&request_id")
+                restaurant_link = "/biz/"+restaurant_link[start+21:end]
 
-        start = content.find('property="og:description" content="')
-        sub_content = content[start+35:]
-        end = sub_content.find('">')
-        specialties = sub_content[:end]
+            restaurant_link = "https://www.yelp.com"+ restaurant_link
+            r = requests.get(restaurant_link, allow_redirects = True, headers = headers)
+            content = str(r.content)
 
-        start = content.find('role="img" aria-label="')
-        sub_content = content[start+23:]
-        end = sub_content.find('">')
-        rating = sub_content[:end]
-        rating = rating[:-12]
 
-        start = content.find('" css-qyp8bo" data-font-weight="semibold">')
-        sub_content = content[start+42:]
-        end = sub_content.find('</p>')
-        address = sub_content[:end]
 
-        restaurant_html = BeautifulSoup(content,'html.parser')
+            start = content.find('property="og:description" content="')
+            sub_content = content[start+35:]
+            end = sub_content.find('">')
+            specialties = sub_content[:end]
 
-        name = restaurant_html.find('h1')
-        if name:
-            name = name.text
+            start = content.find('role="img" aria-label="')
+            sub_content = content[start+23:]
+            end = sub_content.find('">')
+            rating = sub_content[:end]
+            rating = rating[:-12]
 
-        dollars = restaurant_html.find('span',{"class":"css-1fdy0l5"})
-        if dollars.contains("$"):
-            if dollars:
-                dollars = dollars.text
-        else:
-            dollars = ""
+            start = content.find('" css-qyp8bo" data-font-weight="semibold">')
+            sub_content = content[start+42:]
+            end = sub_content.find('</p>')
+            address = sub_content[:end]
 
-        hours = restaurant_html.find('span',{"class":"display--inline__09f24__c6N_k margin-l1__09f24__m8GL9 border-color--default__09f24__NPAKY"})
-        if hours:
-            hours = hours.text
-        popular_dishes = [dish.text for dish in restaurant_html.find_all('p',{"class":"css-nyjpex"})]
+            restaurant_html = BeautifulSoup(content,'html.parser')
 
-        address = restaurant_html.find('p',{"class":"css-qyp8bo", "data-font-weight":"semibold"})
-        if address:
-            address = address.text
+            name = restaurant_html.find('h1')
+            if name:
+                name = name.text
 
-        restaurant_json = {}
-        restaurant_json["name"] = name
-        restaurant_json["dollars"] = dollars
-        restaurant_json["hours"] = hours
-        restaurant_json["rating"] = rating
-        restaurant_json["popular_dishes"] = popular_dishes
-        restaurant_json["address"] = address
-        restaurant_json["specialties"] = specialties
+            dollars = restaurant_html.find('span',{"class":"css-1fdy0l5"})
+            if dollars.contains("$"):
+                if dollars:
+                    dollars = dollars.text
+            else:
+                dollars = ""
 
-        restaurant_data.append(restaurant_json)
+            hours = restaurant_html.find('span',{"class":"display--inline__09f24__c6N_k margin-l1__09f24__m8GL9 border-color--default__09f24__NPAKY"})
+            if hours:
+                hours = hours.text
+            popular_dishes = [dish.text for dish in restaurant_html.find_all('p',{"class":"css-nyjpex"})]
 
-    write_file = open("restaurants_"+str(i)+".json", 'w')
-    write_file.write(json.dumps(restaurant_data))
+            address = restaurant_html.find('p',{"class":"css-qyp8bo", "data-font-weight":"semibold"})
+            if address:
+                address = address.text
+
+            restaurant_json = {}
+            restaurant_json["name"] = name
+            restaurant_json["dollars"] = dollars
+            restaurant_json["hours"] = hours
+            restaurant_json["rating"] = rating
+            restaurant_json["popular_dishes"] = popular_dishes
+            restaurant_json["address"] = address
+            restaurant_json["specialties"] = specialties
+
+            restaurant_data.append(restaurant_json)
+
+        write_file = open("restaurants_"+str(i)+".json", 'w')
+        write_file.write(json.dumps(restaurant_data))
+        write_file.close()
+
+    all_data = []
+    for i in range(24):
+        f = open('restaurants_'+str(i)+'.json')
+        data = json.load(f)
+        all_data.extend(data)
+        os.remove('restaurants_'+str(i)+'.json')
+
+    write_file = open("restaurants.json", 'w')
+    write_file.write(json.dumps(all_data))
     write_file.close()
 
-all_data = []
-for i in range(24):
-    f = open('restaurants_'+str(i)+'.json')
-    data = json.load(f)
-    all_data.extend(data)
-    os.remove('restaurants_'+str(i)+'.json')
-
-write_file = open("restaurants.json", 'w')
-write_file.write(json.dumps(all_data))
-write_file.close()
+    # for the static database we need to manually clean a little bit
+    # use an actual API for the future
