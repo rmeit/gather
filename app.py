@@ -11,6 +11,7 @@ app = Flask(__name__)
 groups = {}
 
 class user:
+    """A unique user of the app."""
     def __init__(self, name, creator=False):
         self.name = name
         self.user_id = uuid.uuid4()
@@ -23,6 +24,7 @@ class user:
         return self.name + " : " + self.preferences
     
 class group:
+    """A group of users. Has a creator."""
     def __init__(self, creator_name):
         self.creator = user(creator_name, creator=True)
         self.group_id = uuid.uuid4()
@@ -48,11 +50,17 @@ class group:
     def delete(self):
         ### TODO ###
         return True
+  
 
 @app.route('/')
 def index():
    print('Request for index page received')
    return render_template('index.html')
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == '__main__':
    app.run()
