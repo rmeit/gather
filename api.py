@@ -11,10 +11,10 @@ from geopy.distance import geodesic
 
 if os.environ.get("OPENAI_API_KEY") is None:
     with open("openkey.txt", 'r') as f:
-        api_key = f.read()
+        api_key = f.readline().strip('\n')
 else:
     api_key = os.environ.get("OPENAI_API_KEY")
-    
+
 openai.api_key = api_key
 os.environ["OPENAI_API_KEY"] = api_key
 model_list = openai.Model.list()
@@ -126,8 +126,9 @@ class Aggregator(AggregatorInterface):
         return_dict["users"] = info["users"]
         return return_dict
     def __call__(self):
-        print(self.llm(self.build_prompt()))
+        response = self.llm(self.build_prompt())
         self.reset_llm()
+        return json.loads(response)
 
 class StepAggregator(AggregatorInterface):
     default_intro = """
@@ -314,4 +315,5 @@ def get_aggregator(user_preferences):
     intro = Aggregator.default_intro
     outro = old_outro
     opts = options
-    return Aggregator(intro, opts, user_preferences, outro, user_preferences)
+    return Aggregator(intro, opts, outro, user_preferences)
+# %%

@@ -11,6 +11,7 @@ def message(input):
     return jsonify({'message': input})
 
 def format_request(request):
+    print(request.data)
     return json.loads(request.data)
 
 class user:
@@ -42,6 +43,8 @@ class group:
         self.users = {self.creator.user_id: self.creator}
         group.groups[self.group_id] = self
         self.recommendations = None
+        with open('rec.json', 'w') as f:
+            f.write(json.dumps({}))
     
     def get_info(self):
         return self.creator.user_id, self.group_id
@@ -54,13 +57,30 @@ class group:
     def find_recommendations(self):
         """Feed the group's preferences to the model and get recommendations."""
         ### TODO ###
-        self.recommendations = get_aggregator({
+        with open('rec.json', 'r') as f:
+            recs = json.loads(f.read())
+        if self.group_id in recs:
+            del recs[str(self.group_id)]
+        with open('rec.json', 'w') as f:
+            f.write(json.dumps(recs))
+        
+        recommendations = get_aggregator({
             k: user.users[k].preferences for k in self.users.keys()
         })()
-        return self.recommendations
-    
+        
+        with open('rec.json', 'r') as f:
+            recs = json.loads(f.read())
+        recs[self.group_id] = recommendations
+        with open('rec.json', 'w') as f:
+            f.write(json.dumps(recs))
+
     def get_recommendations(self):
         """Return the recommendations for the whole group."""
+        with open('rec.json', 'r') as f:
+            recs = json.loads(f.read())
+        if str(self.group_id) not in recs.keys():
+            return None
+        self.recommendations = recs[str(self.group_id)]
         return self.recommendations
     
     def delete(self):
@@ -127,6 +147,7 @@ def find_recommendations():
         if not this_user.creator:
             return "Only the group creator can find recommendations."
         this_group = this_user.group
+        this_group.recommendations = None
         Thread(target=this_group.find_recommendations).start()
         return jsonify({'user_id': user_id})
     else:
@@ -140,12 +161,13 @@ def get_recommendations():
     if user_id:
         print('Request to get recommendations received with user_id=%s' % (user_id))
         if user_id not in user.users:
-            return "No user with that user_id exists."
+            return message("No user with that user_id exists.")
         this_user = user.users[user_id]
         this_group = this_user.group
-        if this_group.get_recommendations() == None:
+        recommendations = this_group.get_recommendations()
+        if recommendations == None:
             return message("No recommendations have been found yet for this group.")
-        return jsonify({'recommendations': this_group.get_recommendations()})
+        return jsonify({'recommendations': recommendations})
     else:
         print('Request for page received with no name or blank name -- redirecting')
         return redirect(url_for('index'))
