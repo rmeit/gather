@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import os
 
-url = 'https://www.yelp.com/search?find_desc=&find_loc=Berkeley%2C+CA'
+
 headers={
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding": "gzip, deflate, br",
@@ -21,6 +21,7 @@ headers={
 }
 
 def scrape_berkeley_restaurants():
+    url = 'https://www.yelp.com/search?find_desc=&find_loc=Berkeley%2C+CA'
     # there are 230 or so
     for i in range(24):
         request_url = url
@@ -48,8 +49,6 @@ def scrape_berkeley_restaurants():
             r = requests.get(restaurant_link, allow_redirects = True, headers = headers)
             content = str(r.content)
 
-
-
             start = content.find('property="og:description" content="')
             sub_content = content[start+35:]
             end = sub_content.find('">')
@@ -73,15 +72,31 @@ def scrape_berkeley_restaurants():
                 name = name.text
 
             dollars = restaurant_html.find('span',{"class":"css-1fdy0l5"})
-            if dollars.contains("$"):
-                if dollars:
+            if dollars:
+                if "$" in dollars:
                     dollars = dollars.text
+                else:
+                    dollars = ""
             else:
                 dollars = ""
+
+            maybe_menus = restaurant_html.find_all('a',{"class":"css-11i4m5w", "data-button":"true"})
+            menu = ""
+            if maybe_menus:
+                for maybe_menu in maybe_menus:
+                    if "yelp.com/biz_redir" in maybe_menu["href"]:
+                        menu = maybe_menu['href']
+            if menu == "":
+                menu = restaurant_link
 
             hours = restaurant_html.find('span',{"class":"display--inline__09f24__c6N_k margin-l1__09f24__m8GL9 border-color--default__09f24__NPAKY"})
             if hours:
                 hours = hours.text
+
+            img = restaurant_html.find('img',{"class":"photo-header-media-image__09f24__A1WR_"})
+            if img:
+                img = img['src']
+
             popular_dishes = [dish.text for dish in restaurant_html.find_all('p',{"class":"css-nyjpex"})]
 
             address = restaurant_html.find('p',{"class":"css-qyp8bo", "data-font-weight":"semibold"})
@@ -96,23 +111,42 @@ def scrape_berkeley_restaurants():
             restaurant_json["popular_dishes"] = popular_dishes
             restaurant_json["address"] = address
             restaurant_json["specialties"] = specialties
-
+            restaurant_json["menu_link"] = menu
+            restaurant_json["img"] = img
             restaurant_data.append(restaurant_json)
-
-        write_file = open("restaurants_"+str(i)+".json", 'w')
+        print(i)
+        write_file = open("more_restaurants_"+str(i)+".json", 'w')
         write_file.write(json.dumps(restaurant_data))
         write_file.close()
 
     all_data = []
     for i in range(24):
-        f = open('restaurants_'+str(i)+'.json')
+        f = open('more_restaurants_'+str(i)+'.json')
         data = json.load(f)
         all_data.extend(data)
-        os.remove('restaurants_'+str(i)+'.json')
+        os.remove('more_restaurants_'+str(i)+'.json')
 
-    write_file = open("restaurants.json", 'w')
+    write_file = open("more_restaurants_.json", 'w')
     write_file.write(json.dumps(all_data))
     write_file.close()
 
     # for the static database we need to manually clean a little bit
     # use an actual API for the future
+
+def parse_info(str):
+    # Force chatGPT to output this format:
+    # {
+    # "name": "Berkeley Social Club",
+    # "explanation": "Berkeley Social Club is a unique establishment that combines contemporary full bar Korean cuisine with American breakfast and lunch options. The restaurant offers a wide variety of popular dishes, including Bulgogi, Blackstone Benedict, Spicy Pork, and more. The diverse menu and the availability of both Korean and American dishes cater to a wide range of preferences. The casual and social atmosphere makes it a great place to enjoy a meal with friends or family."
+    # }
+    info = json.loads(str)
+    name = info["name"]
+    f = open('more_restaurants.json')
+    restaurants = json.load(f)
+    restaurant = restaurants[name]
+    wanted_keys = ['name', 'hours', 'address', 'dollars', 'rating', 'specialties', 'menu_link', 'img']
+    return dict((k, restaurant[k]) for k in wanted_keys if k in restaurant)
+
+
+
+scrape_berkeley_restaurants()
