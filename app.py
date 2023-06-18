@@ -2,6 +2,7 @@ import os, sys
 import uuid
 from flask import (Flask, redirect, render_template, request, json, jsonify, url_for)
 from threading import Thread
+from api import get_aggregator
 
 app = Flask(__name__)
 
@@ -53,7 +54,9 @@ class group:
     def find_recommendations(self):
         """Feed the group's preferences to the model and get recommendations."""
         ### TODO ###
-        self.recommendations = "We recommend a nice plate of figs."
+        self.recommendations = get_aggregator({
+            k: user.users[k].preferences for k in self.users.keys()
+        })()
         return self.recommendations
     
     def get_recommendations(self):
@@ -153,7 +156,8 @@ def index():
    return True
 
 if __name__ == '__main__':
-   isDev = sys.argv[1] == 'dev'
+
+   isDev = len(sys.argv)>=2 and sys.argv[1] == 'dev'
    if isDev:
     app.run(debug=True, host='0.0.0.0', port=80)
    else:
