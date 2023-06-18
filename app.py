@@ -4,15 +4,15 @@ from flask import (Flask, redirect, render_template, request, json, jsonify, url
 
 app = Flask(__name__)
 
-users = {}
 class user:
+    users = {}
     """A unique user of the app."""
     def __init__(self, name, group, creator=False):
         self.name = name
         self.user_id = uuid.uuid4()
         self.group = group
         self.creator = creator
-        users[self.user_id] = self
+        user.users[self.user_id] = self
 
     def set_preferences(self, preferences):
         self.preferences = preferences
@@ -20,18 +20,20 @@ class user:
     def __str__(self) -> str:
         return self.name + " : " + self.preferences
     
-groups = {}
-group_id_tracker = 10000
 class group:
+    groups = {}
+    id_tracker = 10000
     """A group of users. Has a creator."""
     def __init__(self, creator_name):
-        self.group_id = group_id_tracker
-        group_id_tracker += 1
-        if group_id_tracker > 99990:
-            group_id_tracker = 10000
+        self.group_id = group.id_tracker
+        group.id_tracker += 1
+        if group.id_tracker > 99990:
+            group.id_tracker = 10000
         self.creator = user(creator_name, self, creator=True)
         self.users = {self.creator.user_id: self.creator}
-        groups[self.group_id] = self
+        group.groups[self.group_id] = self
+    
+    def get_info(self):
         return self.creator.user_id, self.group_id
     
     def add_user(self, user_name):
@@ -63,29 +65,28 @@ class group:
 @app.route('/create_room', methods=['POST'])
 def create_room():
    """Creates a new group. Assigns group_id. Adds the creator to the group as the first user."""
-   content_type = request.headers.get('Content-Type')
-   if (content_type == 'application/json'):
-       json = request.get_json()
-   creator_name = request.form.get('name')
+   content = request.form.to_dict()
+   creator_name = content['name']
    if creator_name:
         print('Request to create received with creator_name=%s' % creator_name)
-        creator_id, new_group = group(creator_name)
-        return jsonify({'user_id': creator_id, 'group_id': new_group.group_id})
+        created_group = group(creator_name)
+        print(created_group.group_id)
+        return jsonify({'user_id': created_group.creator.user_id, 'group_id': created_group.group_id})
    else:
        print('Request for hello page received with no name or blank name -- redirecting')
        return {} 
 
-@app.route('/create_room', methods=['POST'])
-def create_room():
-   """Creates a new group. Assigns group_id. Adds the creator to the group as the first user."""
-   creator_name = request.form.get('name')
-   if creator_name:
-         print('Request to create received with creator_name=%s' % creator_name)
-         creator_id, new_group = group(creator_name)
-         return jsonify({'user_id': creator_id, 'group_id': new_group.group_id})
-   else:
-       print('Request for hello page received with no name or blank name -- redirecting')
-       return {}
+# @app.route('/create_room', methods=['POST'])
+# def create_room():
+#    """Creates a new group. Assigns group_id. Adds the creator to the group as the first user."""
+#    creator_name = request.form.get('name')
+#    if creator_name:
+#          print('Request to create received with creator_name=%s' % creator_name)
+#          creator_id, new_group = group(creator_name)
+#          return jsonify({'user_id': creator_id, 'group_id': new_group.group_id})
+#    else:
+#        print('Request for hello page received with no name or blank name -- redirecting')
+#        return {}
    
 @app.route('/join_room', methods=['POST'])
 def join_room():
@@ -94,10 +95,10 @@ def join_room():
     user_name = request.form.get('user_name')
     if group_id and user_name:
         print('Request to join received with group_id=%s and user_name=%s' % (group_id, user_name))
-        if group_id not in groups:
+        if group_id not in group.groups:
             print("No group with that group_id exists.")
             return {}
-        this_group = groups[group_id]
+        this_group = group.groups[group_id]
         new_user = this_group.add_user(user_name)
         return jsonify({'user_id': new_user.user_id})
     else:
@@ -111,9 +112,9 @@ def set_preferences():
     preferences = request.form.get('preferences')
     if user_id and preferences:
         print('Request to set preferences received with user_id=%s and preferences=%s' % (user_id, preferences))
-        if user_id not in users:
+        if user_id not in user.users:
             return "No user with that user_id exists."
-        this_user = users[user_id]
+        this_user = user.users[user_id]
         this_user.set_preferences(preferences)
         return '''<h1>Your preferences have been set.'''
     else:
@@ -126,9 +127,9 @@ def find_recommendations():
     user_id = request.form.get('user_id')
     if user_id:
         print('Request to find recommendations received with user_id=%s' % (user_id))
-        if user_id not in users:
+        if user_id not in user.users:
             return "No user with that user_id exists."
-        this_user = users[user_id]
+        this_user = user.users[user_id]
         if not this_user.creator:
             return "Only the group creator can find recommendations."
         this_group = this_user.group
@@ -144,9 +145,9 @@ def get_recommendations():
     user_id = request.form.get('user_id')
     if user_id:
         print('Request to get recommendations received with user_id=%s' % (user_id))
-        if user_id not in users:
+        if user_id not in user.users:
             return "No user with that user_id exists."
-        this_user = users[user_id]
+        this_user = user.users[user_id]
         this_group = this_user.group
         if this_group.recommendations == None:
             return "No recommendations have been found yet for this group."
