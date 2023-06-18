@@ -154,6 +154,22 @@ def find_recommendations():
         print('Request for page received with no name or blank name -- redirecting')
         return redirect(url_for('index'))
     
+@app.route('/group_status', methods=['POST'])
+def group_status():
+    """Returns the number of users in the group, and the number of submissions."""
+    content = format_request(request)
+    user_id = content['user_id']
+    if user_id:
+        print('Request to get group status of user_id=%s' % (user_id, preferences))
+        if user_id not in user.users:
+            return "No user with that user_id exists."
+        this_user = user.users[user_id]
+        group = this_user.group
+        return jsonify({'num_submissions': group.num_submissions(), 'num_users': group.num_users()})
+    else:
+        print('Request for page received with no name or blank name -- redirecting')
+        return redirect(url_for('index'))
+    
 @app.route('/get_recommendations', methods=['POST'])
 def get_recommendations():
     """If recommendations are ready, return recommendations as a text string. Else do nothing."""
