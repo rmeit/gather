@@ -1,7 +1,7 @@
 [
   {
     "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
+    "dollars" : "",
     "hours" : "",
     "rating" : "5",
     "popular_dishes" : [],
@@ -501,33 +501,6 @@
     "specialties" : "Specialties: * Visit Our New Takeout Locations at Kirala2 at 1511 Shattuck Ave Berkeley, CA (510)649-1384 Established in 1989. "
   },
   {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
-  },
-  {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
     "name" : "Thai Table",
     "dollars" : "$$",
     "hours" : "1:00 PM - 9:30 PM",
@@ -1020,15 +993,6 @@
     "specialties" : "Specialties: Welcome to the London Bar & Grill, located in the new all-suite, full-service SpringHill Suites by Marriott, we are open for all-day dining - whether you're in the mood for our prime, select steaks or a light snack over drinks, we've got you covered.Our premium British cuisine provides an unprecedented taste that is truly unique to the surrounding area.Complementing the kitchen, our London-style bar serves up an impressive array of cocktails, inspiring a lively atmosphere throughout the restaurant.Raising the Bar?Inspire your guests with cocktails fireside on the TerraceAvailable for semi-private, private terrace or exclusive private events.Staying-In?Find us on Uber Eats.Room Service Available to SpringHill Suites GuestsReserve a MasterclassAre you an expert in drinking cocktails? Would it be a great if you could craft some fine concoction of your own? If your after a unique event for a hen do or a team building day, a cocktail masterclass is ideal.Give us a call on 510-569-7000 to reserve a Masterclass today!"
   },
   {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
-  },
-  {
     "name" : "Rojbas Grill",
     "dollars" : "$$",
     "hours" : "11:00 AM - 10:00 PM",
@@ -1282,24 +1246,6 @@
     "specialties" : "Specialties: Check us out online and on IG @elpollopicanteberkeley for our latest updates! Established in 2020.  Berkeley's Very Own Spicy Fried Chicken Sandwich"
   },
   {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
     "name" : "Lo Coco's",
     "dollars" : "$$",
     "hours" : "4:00 PM - 9:00 PM",
@@ -1534,15 +1480,6 @@
     ],
     "address" : "2618 Telegraph Ave Berkeley, CA 94704",
     "specialties" : "Specialties: Filipino-inspired empanadas baked in our homemade flaky pastry dough. We also serve Filipino desserts (preorder), and baked goods vary. Our tropical-inspired boba drinks are made with fresh milk and tea forward. Established in 2022.  We started with doing pop-up events and catering."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
   },
   {
     "name" : "Hashtag Poki",
@@ -1788,15 +1725,6 @@
     ],
     "address" : "1725 University Ave Berkeley, CA 94703",
     "specialties" : ""
-  },
-  {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
   },
   {
     "name" : "Pizza Hut",
@@ -2070,24 +1998,6 @@
     "specialties" : "Specialties: Sichuan style restaurant"
   },
   {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
-  },
-  {
     "name" : "Chai Thai Noodles - Berkeley",
     "dollars" : "$$",
     "hours" : "11:00 AM - 3:00 PM, 4:30 PM - 9:30 PM",
@@ -2331,15 +2241,6 @@
     "specialties" : ""
   },
   {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
     "name" : "Bua Thai Kitchen",
     "dollars" : "$$",
     "hours" : "12:00 PM - 10:00 PM",
@@ -2580,15 +2481,6 @@
     ],
     "address" : "1686 Shattuck Ave Berkeley, CA 94709",
     "specialties" : "Specialties: many vegan dishes we make it such is noodles, sushi, appetizer, salad also we served japanese beer. sake.wine too. Established in 2000.  2000 started...mostly had vegan customer."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
   },
   {
     "name" : "Saul's Restaurant & Delicatessen",
@@ -2842,24 +2734,6 @@
     ],
     "address" : "2283 Shattuck Ave Berkeley, CA 94704",
     "specialties" : "Specialties: Fresh ingredient everyday! Everything is homemade; curries make from scratch and they are gluten-free! Chili sauce is a must as we continue grandma (Plearn)'s recipe! Established in 1982.  Plearn has been a name in Berkeley for over 30 years! She opened an authentic Thai restaurant on University Ave. in 1982. After retirement, she has left her mark on many customers and mentored many in those years. Since 2000, Little Plearn Thai Kitchen has continued her recipes and influences. Her favorite curries and taste have not changed. We still continue to make curry from scratch, soups are made to order, sauce are from Thai herbs and spices. This takes time but we wouldn't have it any other way. That also means spice levels are out of our control! The fresh Thai chili produce we get every other day will determine the spice level. We hope you enjoy our Thai American family recipes!"
-  },
-  {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
   },
   {
     "name" : "Agrodolce Osteria",
@@ -3323,15 +3197,6 @@
     "specialties" : ""
   },
   {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
     "name" : "Crepevine Restaurants",
     "dollars" : "$$",
     "hours" : "8:00 AM - 9:00 PM",
@@ -3532,15 +3397,6 @@
     ],
     "address" : "1647 Solano Ave Berkeley, CA 94707",
     "specialties" : ""
-  },
-  {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
   },
   {
     "name" : "Las Delicias Salvadoran",
@@ -3769,15 +3625,6 @@
     ],
     "address" : "1181 Solano Ave Albany, CA 94706",
     "specialties" : ""
-  },
-  {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
   },
   {
     "name" : "Peet's Coffee",
@@ -4425,15 +4272,6 @@
     "specialties" : "US\" prefix=\"og: http://ogp.me/ns#\" style=\"margin: 0;padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline;"
   },
   {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
-  },
-  {
     "name" : "Peet's Coffee",
     "dollars" : "$",
     "hours" : "7:00 AM - 3:00 PM",
@@ -4672,15 +4510,6 @@
     ],
     "address" : "2120 Dwight Way Berkeley, CA 94704",
     "specialties" : "Specialties: Open 7 days a week!  WayStationBrewRestaurantCoffee BarBeer GardenDAYS: 8am-3pm Mon-Sat, 9am-3pm Sun. Kitchen closes at 2pm. NIGHTS: 6:30-9:30 Wed-Sat. -Our Wagyu Smash Burger Menu!  Kitchen closes at 9pm. A favorite Neighborhood Restaurant with fantastic Coffee & Beer. Your daily Cafe and Specialty Coffee Roaster who cares just as much about delicious, quality food. Plus a solid beer selection. Win Win Win!Way Station Brew is a hidden gem just off the beaten path of Downtown Berkeley -- Come fall in love. We are a coffee roaster's cafe and a restaurant with a sunny beer garden patio. Experience friendly neighborhood hospitality and a menu that is hearty and delicious. The cafe is warm and cozy and the beer garden is dog-friendly. For breakfast enjoy our legendary house-made scones, classic breakfasts and our customer-favorite fried egg sandwich.  For lunch our hot sandwiches and Wagyu Smash Burgers go down great with a cold beer... everything you need to unwind all day and everyday.WayStationBrew- Find us on Instagram- Delicious, fresh meals for Vegans to Carnivores - $5 Mimosas- Famous Hot Scones every morning- Fresh Roasted Coffee In-House- Full Espresso based menu- Kyoto Cold DripBreakfast, Lunch, and Burger Dinner Menu, legendary scones and Firebrand pastry all to wash down with our house-roasted coffee, a variety of mimosas, a large selection of beer and delicious natural wines too.  Established in 2017.  That's two years and a pandemic!  We thank you for your patience as we get back on our feet.  In 2017... A cook, a baker and a coffee roaster walk into a way station...  In 2020 everything went sideways but we've held on thanks to a great community of friends, neighbors, family, and our wonderful and hardworking team!  We're dedicated to building a better Way Station for all.  The setting is a charming brick building from the 1880's with a fantastic outdoor beer garden. A warm and inviting gem in a sea of cold, shiny and new.  Serving Breakfast, Lunch, and Wagyu Smash Burger Dinners. Plus our legendary scones and pastry along with our house-roasted coffee, beer, wine, mimosas and more.  Follow @waystationbrew on IG and keep up to date.  Way Station Brew is at the very intersection that sat the Dwight Way Station for the Shattuck Railroad Line in the 1890's."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
   },
   {
     "name" : "Peet's Coffee",
@@ -4932,15 +4761,6 @@
     "specialties" : "Specialties: Family owned Mediterranean food with a lot of healthy choices. Wholesome salads, wraps and plates. Dine-in or carry out. Established in 2019.  Opened on 2/14/2019"
   },
   {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
-  },
-  {
     "name" : "Bowlero Alameda",
     "dollars" : "Bowling, ",
     "hours" : "12:00 PM - 12:00 AM ",
@@ -5145,15 +4965,6 @@
     ],
     "address" : "2433 Durant Ave Ste E Berkeley, CA 94704",
     "specialties" : "Specialties: Hawaiian style raw fish salad Established in 2017.  We are located in Sather Lane. Walk through the alley.Channing parking garage is across the street. Free the first hour."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
   },
   {
     "name" : "Bowlero Alameda",
@@ -5410,15 +5221,6 @@
     "specialties" : "Specialties: Come and try our tasty noodle soup and handmade pork buns and dumplings "
   },
   {
-    "name" : "East Bay Pie",
-    "dollars" : "Specialty Food, ",
-    "hours" : "",
-    "rating" : "5",
-    "popular_dishes" : [],
-    "address" : "1225 4th St Berkeley, CA 94710",
-    "specialties" : "Specialties: East Bay Pie Co. from Our Kitchen To Yours we offer frozen pies shipped to your door, providing a quick and delicious meal option. Established in 2020.  East Bay Pie Co was born from the minds of two long time Bay Area culinary industry colleagues. Rahul, one of the cofounders, was inspired by the Bay Area food scene, while Bill, the other cofounder, having grown up eating fresh produce right out of his grandma's garden, realized the importance of using local purveyors. Using their knowledge in the culinary world, they wanted to introduce a concept that provided customers with an array of flavors from all around the world. Made right out of their Emeryville kitchen, they utilize local vendors and top quality ingredients for their savory and sweet hand pies. They hope to let their customers experience the essence of different cultures through their simple, yet untraditional hand pies."
-  },
-  {
     "name" : "Starbucks",
     "dollars" : "$",
     "hours" : "6:00 AM - 8:00 PM",
@@ -5630,24 +5432,6 @@
     ],
     "address" : "1903 University Ave Berkeley, CA 94704",
     "specialties" : "Specialties: Udupi Palace - serving the Bay area population with its authentic South Indian dishes.We are known for our variety of Dosa and Uthappams. We are popularly known as &quot;a place for Dosa.......&quot;. To satisfy our customers with wide choice of South Indian Dishes, variety chutneys (dipping sauce), wide choice of Indian curries and rice variety, indian bread and indian desserts. Established in 2000.  Udupi palace is located in the heart of the Silicon Valley. We started in the year of 2000.We brought the taste bud of the pure south indian vegetarian cuisine to the Bay area. Udupi cuisine is a world-renowned cuisine. It takes its name from Udupi, a place on the southwest coast of India in the state of Karnataka. Udupi cuisine includes an entire school of South Indian vegetarian cuisine. This is 'pure' vegetarian food. The ubiquitous Indian dish Masala Dosa has its origins in Udupi. Rasam, a spicy pepper water, is another essential part of the menu.Udupi's sambhar has its own unique taste. We take pride in serving the Bay Area population with the authentic south indian vegetarian dishes, from the day we started. For the convience of our customers we opened branches in other part of the bayarea and also in other states of USA."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
-  },
-  {
-    "name" : "Pizza Hut",
-    "dollars" : "$",
-    "hours" : "10:00 AM - 12:00 AM ",
-    "rating" : "1.5",
-    "popular_dishes" : [],
-    "address" : "14501 San Pablo Ave San Pablo, CA 94806",
-    "specialties" : "Specialties: Find your nearby Pizza Hut at 14501 San Pablo Ave in San Pablo, CA. You can try, but you can't OutPizza the Hut. We're serving up classics like Meat Lovers and Original Stuffed Crust as well as signature wings, pastas and desserts at many of our locations. Order online or on the mobile app for carryout, curbside or delivery. Established in 1958.  In 1958, two brothers borrowed $600 from their mom to open a pizza place in Wichita, Kansas. They named it Pizza Hut because their sign only had room for eight letters. How profound! Soon, the restaurant grew. Why? The pizza was awesome. The service felt like home. And the customers were treated like family. And we've been delivering that same food and service ever since. For the Love of Pizza Since 1958. From day one, the Carney brothers could look their customers in the eye and promise them the finest pizza in town -- because they knew the farmers who grew the ingredients, and they knew those farmers cared about quality. Since then, our farmers have grown right alongside us, and the ingredients we use are still our highest priority. No one loves pizza more than Pizza Hut. That's why pizza is in our name -- and always will be."
   },
   {
     "name" : "UC Botanical Garden at Berkeley",
